@@ -28,6 +28,7 @@
         "@typescript-eslint/no-use-before-define": "off",
         "react/jsx-props-no-spreading": "off",
         "react/no-unstable-nested-components": "off",
-        "import/prefer-default-export": "off"
+        "import/prefer-default-export": "off",
+        "no-console": "off"
     }
 }
