@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import userRoutes from './routes/user';
+import authRoutes from './routes/auth';
 import db from './models';
 
 const app = express();
@@ -13,6 +14,7 @@ const middleware = (req, _, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(middleware);
+app.use('/', authRoutes);
 app.use('/users', userRoutes);
 
 app.listen(process.env.PORT, () => {

@@ -15,7 +15,7 @@ router.post(
     },
     phoneNumber: {
       in: ['body'],
-      isString: true,
+      isInt: true,
       errorMessage: 'Invalid Phone Number',
     },
     email: {
@@ -28,6 +28,10 @@ router.post(
       in: ['body'],
       isString: true,
       errorMessage: 'Invalid Password',
+      isLength: {
+        errorMessage: 'Password should be at least 8 characters long',
+        options: { min: 8 },
+      },
     },
   }),
   async ({ db: { user }, matchedData }, res) => {
