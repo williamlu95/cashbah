@@ -10,3 +10,17 @@ export const createUser = async (user: {
   const response = await axios.post(`${API_URL}/users`, user);
   return response.data;
 };
+
+type GetUserResponse = {
+  id: string;
+  name: string;
+  isRequested: boolean
+};
+
+export const getUsers = async (search?: string) : Promise<GetUserResponse[]> => {
+  const response = await axios.get(`${API_URL}/users`, {
+    params: { search },
+  });
+
+  return response.data;
+};

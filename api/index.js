@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import userRoutes from './routes/user';
 import authRoutes from './routes/auth';
+import healthCheckRoutes from './routes/healthcheck';
 import db from './models';
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(middleware);
 app.use('/', authRoutes);
 app.use('/users', userRoutes);
+app.use('/healthcheck', healthCheckRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}.`);

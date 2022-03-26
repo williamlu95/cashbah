@@ -69,15 +69,14 @@ export default function SignUpScreen({ navigation } : RootTabScreenProps<'SignUp
 
   const handleSubmit = async () => {
     setIsSubmitted(true);
-    const isValidInput = validateInput();
-    if (!isValidInput) {
+    if (!validateInput()) {
       return;
     }
 
     try {
       const accessToken = await createUser({
         name,
-        phoneNumber,
+        phoneNumber: phoneNumber.replace(/\D/g, ''),
         email,
         password,
       });

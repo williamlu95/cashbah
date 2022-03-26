@@ -5,7 +5,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { RootTabParamList, RootTabScreenProps } from '../types';
 import useColorScheme from '../hooks/useColorScheme';
 import Colors from '../constants/Colors';
-import TabOneScreen from '../screens/TabOneScreen';
+import TabOneScreen from '../screens/FriendsScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import TabBarIcon from '../components/Icon';
 
@@ -25,17 +25,17 @@ export default function BottomTabNavigator() {
         name="TabOne"
         component={TabOneScreen}
         options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Friends',
+          tabBarIcon: ({ color }) => <TabBarIcon name="users" color={color} />,
           headerRight: () => (
             <Pressable
-              onPress={() => navigation.navigate('Modal')}
+              onPress={() => navigation.navigate('AddFriends')}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}
             >
               <FontAwesome
-                name="info-circle"
+                name="plus"
                 size={25}
                 color={Colors[colorScheme].text}
                 style={{ marginRight: 15 }}

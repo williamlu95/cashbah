@@ -6,7 +6,7 @@ import { useRecoilValue } from 'recoil';
 import LoginScreen from '../screens/LoginScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 
-import ModalScreen from '../screens/ModalScreen';
+import AddFriendsScreen from '../screens/AddFriendsScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 
 import { RootStackParamList } from '../types';
@@ -23,7 +23,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
+        <Stack.Screen name="AddFriends" component={AddFriendsScreen} options={{ title: 'Add Friends' }} />
       </Stack.Group>
     </>
   ) : (

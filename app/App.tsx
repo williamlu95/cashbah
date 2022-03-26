@@ -3,7 +3,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import { RecoilRoot } from 'recoil';
 import { LogBox } from 'react-native';
-
+import { Provider as PaperProvider } from 'react-native-paper';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
@@ -21,8 +21,10 @@ export default function App() {
     <RootSiblingParent>
       <RecoilRoot>
         <SafeAreaProvider>
-          <Navigation colorScheme={colorScheme} />
-          <StatusBar />
+          <PaperProvider>
+            <Navigation colorScheme={colorScheme} />
+            <StatusBar />
+          </PaperProvider>
         </SafeAreaProvider>
       </RecoilRoot>
     </RootSiblingParent>

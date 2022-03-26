@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { hash } from 'bcrypt';
+import { Op } from 'sequelize';
 import { schemaValidation } from '../middleware/schemaValidation';
+import { authRequired } from '../middleware/authRequired';
 import { createAccessToken } from '../utils/token';
 
 const router = Router();
@@ -49,6 +51,47 @@ router.post(
 
     const accessToken = createAccessToken(createdUser.id);
     res.status(201).send(accessToken);
+  },
+);
+
+router.get(
+  '/',
+  authRequired,
+  schemaValidation({
+    search: {
+      in: ['query'],
+      isString: true,
+      errorMessage: 'Invalid Search',
+      optional: { options: { nullable: true } },
+    },
+  }),
+  async ({ db: { user }, matchedData }, res) => {
+    const where = matchedData.search ? {
+      [Op.or]: [
+        {
+          email: {
+            [Op.like]: `%${matchedData.search}%`,
+          },
+        },
+        {
+          name: {
+            [Op.like]: `%${matchedData.search}%`,
+          },
+        },
+      ],
+    } : {};
+
+    const users = await user.findAll({
+      attributes: ['id', 'name'],
+      where,
+      order: [['name']],
+    });
+
+    res.status(200).send(users.map(({ id, name }) => ({
+      id,
+      name,
+      isRequested: false,
+    })));
   },
 );
 
