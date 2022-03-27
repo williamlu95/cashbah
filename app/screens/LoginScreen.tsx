@@ -2,11 +2,10 @@ import { useEffect, useState } from 'react';
 import {
   Pressable, StyleSheet, View, Text,
 } from 'react-native';
+import { TextInput, Button, Title } from 'react-native-paper';
 import { useSetRecoilState } from 'recoil';
 import { authenticate } from '../apis/auth';
 import { userAccessTokenState } from '../atoms/user';
-import Button from '../components/Button';
-import Input from '../components/Input';
 import { showErrorToast } from '../components/Toast';
 
 import { RootTabScreenProps } from '../types';
@@ -15,7 +14,6 @@ import { validateEmail } from '../utils/validators';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
@@ -77,19 +75,19 @@ export default function LoginScreen({ navigation } : RootTabScreenProps<'Login'>
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <Input
-        autoCompleteType="email"
-        error={error.email}
+      <Title>Login</Title>
+      <TextInput
+        autoComplete="email"
+        error={!!error.email}
         keyboardType="email-address"
         label="Email Address"
         textContentType="emailAddress"
         value={email}
         onChangeText={onChangeEmail}
       />
-      <Input
-        autoCompleteType="password"
-        error={error.password}
+      <TextInput
+        autoComplete="password"
+        error={!!error.password}
         label="Password"
         secureTextEntry
         textContentType="password"
@@ -98,9 +96,11 @@ export default function LoginScreen({ navigation } : RootTabScreenProps<'Login'>
 
       />
       <Button
+        mode="contained"
         onPress={handleSubmit}
-        title="Sign In"
-      />
+      >
+        Sign In
+      </Button>
       <Pressable
         onPress={() => navigation.navigate('SignUp')}
       >

@@ -1,4 +1,4 @@
-import Input from './Input';
+import { TextInput } from 'react-native-paper';
 
 type PhoneInputProps = {
   error?: string,
@@ -41,9 +41,9 @@ export default function PhoneInput(
   };
 
   return (
-    <Input
-      autoCompleteType="tel"
-      error={error}
+    <TextInput
+      autoComplete="tel"
+      error={!!error}
       keyboardType="phone-pad"
       label={label}
       maxLength={14}

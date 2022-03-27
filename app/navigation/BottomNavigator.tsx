@@ -1,57 +1,29 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Pressable } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
+import { ParamListBase } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useState } from 'react';
+import { Text } from 'react-native';
+import { BottomNavigation } from 'react-native-paper';
+import FriendsScreen from '../screens/FriendsScreen';
 
-import { RootTabParamList, RootTabScreenProps } from '../types';
-import useColorScheme from '../hooks/useColorScheme';
-import Colors from '../constants/Colors';
-import TabOneScreen from '../screens/FriendsScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
-import TabBarIcon from '../components/Icon';
+export default function BottomNavigator({ navigation }:
+{ navigation: NativeStackNavigationProp<ParamListBase> }) {
+  const [index, setIndex] = useState(0);
+  const [routes] = useState([
+    { key: 'friends', title: 'Friends', icon: 'account-group' },
+    { key: 'expenses', title: 'Expenses', icon: 'receipt' },
+    { key: 'events', title: 'Events', icon: 'calendar-month' }]);
 
-const BottomTab = createBottomTabNavigator<RootTabParamList>();
-
-export default function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
+  const renderScene = BottomNavigation.SceneMap({
+    friends: () => <FriendsScreen navigation={navigation} />,
+    expenses: () => <Text>Expenses</Text>,
+    events: () => <Text>Events</Text>,
+  });
 
   return (
-    <BottomTab.Navigator
-      initialRouteName="TabOne"
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
-      }}
-    >
-      <BottomTab.Screen
-        name="TabOne"
-        component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          title: 'Friends',
-          tabBarIcon: ({ color }) => <TabBarIcon name="users" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate('AddFriends')}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              <FontAwesome
-                name="plus"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
-        })}
-      />
-      <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoScreen}
-        options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-    </BottomTab.Navigator>
+    <BottomNavigation
+      navigationState={{ index, routes }}
+      onIndexChange={setIndex}
+      renderScene={renderScene}
+    />
   );
 }

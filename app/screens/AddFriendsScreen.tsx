@@ -1,6 +1,8 @@
 import { StyleSheet } from 'react-native';
-import { useCallback, useState } from 'react';
-import { TextInput, List, Divider } from 'react-native-paper';
+import React, { useCallback, useState } from 'react';
+import {
+  Searchbar, List, Divider, Avatar,
+} from 'react-native-paper';
 import debounce from 'lodash.debounce';
 import { View } from '../components/Themed';
 import { getUsers } from '../apis/users';
@@ -15,7 +17,7 @@ const styles = StyleSheet.create({
   },
   row: {
     display: 'flex',
-
+    flexDirection: 'column',
   },
 });
 
@@ -32,23 +34,29 @@ export default function AddFriendScreen() {
   const [users, setUsers] = useState<User[]>([]);
 
   const searchUsers = async (searchText: string) => {
-    if (!searchText) {
+    if (!searchText.trim()) {
       setUsers([]);
       return;
     }
 
-    const results = await getUsers(search);
+    const results = await getUsers(searchText);
     setUsers(results);
   };
 
   const handleSearch = useCallback(debounce(searchUsers, DEBOUNCE_TIMEOUT), []);
 
-  const handleSearchClearPress = () => {
+  const clearSearch = () => {
+    handleSearch.cancel();
     setSearch('');
-    searchUsers('');
+    setUsers([]);
   };
 
   const handleSearchChange = (text: string) => {
+    if (!text) {
+      clearSearch();
+      return;
+    }
+
     setSearch(text);
     handleSearch(text);
   };
@@ -65,37 +73,34 @@ export default function AddFriendScreen() {
   );
 
   const renderUserList = () => users.map(({ id, name, isRequested }) => (
-    <>
-      <List.Item
-        key={id}
-        title={name}
-        right={({ color }) => renderRequestIcon(isRequested, color)}
-        disabled={isRequested}
-        style={styles.row}
-        onPress={handleFriendRequestPress(id)}
-      />
+    <React.Fragment key={id}>
+      <View>
+        <List.Item
+          title={name}
+          left={() => (
+            <Avatar.Image source={{
+              uri: 'https://reactnative.dev/img/tiny_logo.png',
+            }}
+            />
+          )}
+          right={({ color }) => renderRequestIcon(isRequested, color)}
+          disabled={isRequested}
+          onPress={handleFriendRequestPress(id)}
+        />
+      </View>
       <Divider />
-    </>
+    </React.Fragment>
   ));
-
-  const renderSearchClearIcon = () => (
-    <TextInput.Icon
-      name={search ? 'close-circle-outline' : 'magnify'}
-      onPress={handleSearchClearPress}
-    />
-  );
 
   return (
     <View style={styles.container}>
-      <TextInput
+      <Searchbar
         autoFocus
         autoComplete="name"
-        label="Search"
         placeholder="Search by email or name"
         style={styles.input}
         value={search}
         onChangeText={handleSearchChange}
-        right={renderSearchClearIcon()}
       />
       <Divider />
       {renderUserList()}

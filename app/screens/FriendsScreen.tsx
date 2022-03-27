@@ -1,4 +1,7 @@
 import { StyleSheet } from 'react-native';
+import { Appbar } from 'react-native-paper';
+import { ParamListBase } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { View } from '../components/Themed';
 
@@ -8,21 +11,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
 });
 
-export default function FriendsScreen() {
+export default function FriendsScreen({ navigation } :
+{ navigation: NativeStackNavigationProp<ParamListBase> }) {
   return (
-    <View style={styles.container}>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-    </View>
+    <>
+      <Appbar.Header>
+        <Appbar.Content title="Friends" />
+        <Appbar.Action
+          icon="account-plus"
+          onPress={() => navigation.navigate('AddFriends')}
+        />
+      </Appbar.Header>
+      <View style={styles.container} />
+    </>
   );
 }

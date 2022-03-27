@@ -2,12 +2,11 @@ import { useEffect, useState } from 'react';
 import {
   Pressable, StyleSheet, Text, View,
 } from 'react-native';
+import { TextInput, Button, Title } from 'react-native-paper';
 import { useSetRecoilState } from 'recoil';
 import { createUser } from '../apis/users';
 import { userAccessTokenState } from '../atoms/user';
 
-import Button from '../components/Button';
-import Input from '../components/Input';
 import PhoneInput from '../components/PhoneInput';
 import { showErrorToast } from '../components/Toast';
 
@@ -17,7 +16,6 @@ import { validateEmail, validatePassword } from '../utils/validators';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
@@ -90,10 +88,10 @@ export default function SignUpScreen({ navigation } : RootTabScreenProps<'SignUp
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Create Your Account</Text>
-      <Input
-        autoCompleteType="name"
-        error={error.name}
+      <Title>Create Your Account</Title>
+      <TextInput
+        autoComplete="name"
+        error={!!error.name}
         keyboardType="default"
         label="Full Name"
         textContentType="name"
@@ -106,18 +104,18 @@ export default function SignUpScreen({ navigation } : RootTabScreenProps<'SignUp
         phoneNumber={phoneNumber}
         onChangeText={onChangePhoneNumber}
       />
-      <Input
-        autoCompleteType="email"
-        error={error.email}
+      <TextInput
+        autoComplete="email"
+        error={!!error.email}
         keyboardType="email-address"
         label="Email Address"
         textContentType="emailAddress"
         value={email}
         onChangeText={onChangeEmail}
       />
-      <Input
-        autoCompleteType="password"
-        error={error.password}
+      <TextInput
+        autoComplete="password"
+        error={!!error.password}
         label="Password"
         secureTextEntry
         textContentType="password"
@@ -125,9 +123,11 @@ export default function SignUpScreen({ navigation } : RootTabScreenProps<'SignUp
         onChangeText={onChangePassword}
       />
       <Button
+        mode="contained"
         onPress={handleSubmit}
-        title="Register"
-      />
+      >
+        Register
+      </Button>
       <Pressable
         onPress={() => navigation.navigate('Login')}
       >
