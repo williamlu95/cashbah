@@ -21,7 +21,7 @@ router.post(
     },
   }),
   async ({ db, matchedData: { email, password } }, res) => {
-    const user = await db.user.findOne({ where: { email } });
+    const user = await db.User.findOne({ where: { email } });
 
     if (!user) {
       res.sendStatus(404);

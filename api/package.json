@@ -6,7 +6,12 @@
   "scripts": {
     "start": "node -r esm index.js",
     "db:start": "docker run --rm --name=mysql5.7 --env MYSQL_ROOT_PASSWORD=password --detach --publish 3306:3306 mysql:5.7",
+    "db:create": "node -r esm ./scripts/create-db.js",
+    "db:migrate": "sequelize-cli db:migrate",
+    "db:migrate:undo": "sequelize-cli db:migrate:undo",
+    "db:drop": "node -r esm ./scripts/drop-db.js",
     "db:stop": "docker stop mysql5.7",
+    "migrate:create": "sequelize-cli migration:generate --name",
     "watch": "nodemon -r esm index.js"
   },
   "author": "",
@@ -26,6 +31,7 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.4",
     "esm": "^3.2.25",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "sequelize-cli": "^6.4.1"
   }
 }

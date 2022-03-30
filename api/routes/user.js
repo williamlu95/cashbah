@@ -37,15 +37,15 @@ router.post(
       },
     },
   }),
-  async ({ db: { user }, matchedData }, res) => {
-    const userExists = await user.findOne({ where: { email: matchedData.email } });
+  async ({ db: { User }, matchedData }, res) => {
+    const userExists = await User.findOne({ where: { email: matchedData.email } });
 
     if (userExists) {
       res.sendStatus(409);
       return;
     }
 
-    const createdUser = await user.create({
+    const createdUser = await User.create({
       ...matchedData,
       password: await hash(matchedData.password, 10),
     });
@@ -83,7 +83,7 @@ router.get(
     } : {};
 
     const [users, userRelationships] = await Promise.all([
-      db.user.findAll({
+      db.User.findAll({
         attributes: ['id', 'name'],
         where: {
           ...where,
@@ -93,7 +93,7 @@ router.get(
         },
         order: [['name']],
       }),
-      db.userRelationship.findAll({
+      db.UserRelationship.findAll({
         where: {
           relatedFromUserId: userId,
         },

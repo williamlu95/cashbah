@@ -11,8 +11,10 @@
 2. Create an `.env` file from the `example.env` and set the environment variables
 3. Run `npm i`
 4. Run `npm db:start`
-5. Run `npm start`
-6. Wait for the following messages in the terminal
+5. Run `npm db:create`
+6. Run `npm db:migrate`
+7. Run `npm start`
+8. Wait for the following messages in the terminal
 
 - Server is running on port 8080.
 - Connected to database.

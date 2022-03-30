@@ -1,4 +1,6 @@
 import { DataTypes } from 'sequelize';
+import sequelize from './sequelize';
+import User from './user';
 
 export const RELATIONSHIP_TYPE = Object.freeze({
   ACTIVE: 'active',
@@ -6,7 +8,7 @@ export const RELATIONSHIP_TYPE = Object.freeze({
   BLOCKED: 'blocked',
 });
 
-export default (sequelize) => sequelize.define('user_relationship', {
+const UserRelationship = sequelize.define('user_relationship', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
@@ -18,3 +20,8 @@ export default (sequelize) => sequelize.define('user_relationship', {
     defaultValue: RELATIONSHIP_TYPE.PENDING,
   },
 });
+
+UserRelationship.belongsTo(User, { foreignKey: 'relatedFromUserId', as: 'relatedFrom' });
+UserRelationship.belongsTo(User, { foreignKey: 'relatedToUserId', as: 'relatedTo' });
+
+export default UserRelationship;

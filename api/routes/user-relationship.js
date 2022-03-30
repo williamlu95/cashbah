@@ -9,7 +9,7 @@ router.get(
   '/',
   authRequired,
   async ({ db, userId }, res) => {
-    const userRelationships = await db.userRelationship.findAll({
+    const userRelationships = await db.UserRelationship.findAll({
       where: {
         relatedFromUserId: userId,
       },
@@ -46,7 +46,7 @@ router.post(
     },
   }),
   async ({ db, matchedData, userId }, res) => {
-    const userRelationship = await db.userRelationship.create({
+    const userRelationship = await db.UserRelationship.create({
       ...matchedData,
       relatedFromUserId: userId,
     });
@@ -70,7 +70,7 @@ router.put(
   }),
   async ({ db, params, matchedData }, res) => {
     const { userRelationshipId } = params;
-    const userRelationship = await db.userRelationship.update(
+    const userRelationship = await db.UserRelationship.update(
       matchedData,
       { where: { id: userRelationshipId } },
     );
@@ -84,7 +84,7 @@ router.delete(
   authRequired,
   async ({ db, params }, res) => {
     const { userRelationshipId } = params;
-    await db.userRelationship.destroy({ where: { id: userRelationshipId } });
+    await db.UserRelationship.destroy({ where: { id: userRelationshipId } });
     res.status(200);
   },
 );
