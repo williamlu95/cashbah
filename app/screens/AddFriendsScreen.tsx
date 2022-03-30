@@ -6,6 +6,8 @@ import {
 import debounce from 'lodash.debounce';
 import { View } from '../components/Themed';
 import { getUsers } from '../apis/users';
+import { createUserRelationship, RELATIONSHIP_TYPE } from '../apis/user-relationships';
+import { showErrorToast, showSuccessToast } from '../components/Toast';
 
 const styles = StyleSheet.create({
   container: {
@@ -61,9 +63,16 @@ export default function AddFriendScreen() {
     handleSearch(text);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleFriendRequestPress = (id: string) => () => {
-    // TODO: add requesting logic
+  const handleFriendRequestPress = (id: string) => async () => {
+    try {
+      await createUserRelationship({ relatedToUserId: id, type: RELATIONSHIP_TYPE.PENDING });
+      showSuccessToast('Friend Request Successfully Sent.');
+      handleSearch.cancel();
+      await searchUsers(search);
+    } catch (err) {
+      console.error(err);
+      showErrorToast('Friend Request Failed. Please try again.');
+    }
   };
 
   const renderRequestIcon = (isRequested: boolean, color: string) => (

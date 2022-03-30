@@ -5,7 +5,7 @@ import {
 import { TextInput, Button, Title } from 'react-native-paper';
 import { useSetRecoilState } from 'recoil';
 import { authenticate } from '../apis/auth';
-import { userAccessTokenState } from '../atoms/user';
+import { userAccessTokenSelector } from '../atoms/user';
 import { showErrorToast } from '../components/Toast';
 
 import { RootTabScreenProps } from '../types';
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 });
 
 export default function LoginScreen({ navigation } : RootTabScreenProps<'Login'>) {
-  const setUserAccessToken = useSetRecoilState(userAccessTokenState);
+  const setUserAccessToken = useSetRecoilState(userAccessTokenSelector);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [email, onChangeEmail] = useState('');
   const [password, onChangePassword] = useState('');

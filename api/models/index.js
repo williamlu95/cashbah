@@ -1,6 +1,7 @@
 import { Sequelize } from 'sequelize';
 import mysql from 'mysql2/promise';
 import userModel from './user';
+import userRelationshipModel from './user-relationship';
 
 const {
   DB_NAME,
@@ -28,8 +29,11 @@ async function initialize() {
     db.Sequelize = Sequelize;
     db.sequelize = sequelize;
     db.user = userModel(sequelize);
+    db.userRelationship = userRelationshipModel(sequelize);
+    db.userRelationship.belongsTo(db.user, { foreignKey: 'relatedFromUserId', as: 'relatedFrom' });
+    db.userRelationship.belongsTo(db.user, { foreignKey: 'relatedToUserId', as: 'relatedTo' });
 
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ force: false });
     console.log('Connected to database.');
   } catch (e) {
     if (e.code === 'ECONNREFUSED') {

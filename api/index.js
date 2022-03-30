@@ -1,6 +1,8 @@
 import 'dotenv/config';
 import express from 'express';
 import userRoutes from './routes/user';
+import userRelationshipRoutes from './routes/user-relationship';
+
 import authRoutes from './routes/auth';
 import healthCheckRoutes from './routes/healthcheck';
 import db from './models';
@@ -17,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(middleware);
 app.use('/', authRoutes);
 app.use('/users', userRoutes);
+app.use('/user-relationships', userRelationshipRoutes);
 app.use('/healthcheck', healthCheckRoutes);
 
 app.listen(process.env.PORT, () => {

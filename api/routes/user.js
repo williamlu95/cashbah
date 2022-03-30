@@ -4,6 +4,7 @@ import { Op } from 'sequelize';
 import { schemaValidation } from '../middleware/schemaValidation';
 import { authRequired } from '../middleware/authRequired';
 import { createAccessToken } from '../utils/token';
+import { RELATIONSHIP_TYPE } from '../models/user-relationship';
 
 const router = Router();
 
@@ -65,7 +66,7 @@ router.get(
       optional: { options: { nullable: true } },
     },
   }),
-  async ({ db: { user }, matchedData }, res) => {
+  async ({ db, matchedData, userId }, res) => {
     const where = matchedData.search ? {
       [Op.or]: [
         {
@@ -81,16 +82,42 @@ router.get(
       ],
     } : {};
 
-    const users = await user.findAll({
-      attributes: ['id', 'name'],
-      where,
-      order: [['name']],
+    const [users, userRelationships] = await Promise.all([
+      db.user.findAll({
+        attributes: ['id', 'name'],
+        where: {
+          ...where,
+          [Op.not]: {
+            id: userId,
+          },
+        },
+        order: [['name']],
+      }),
+      db.userRelationship.findAll({
+        where: {
+          relatedFromUserId: userId,
+        },
+      }),
+    ]);
+
+    const excludedRelationsSet = new Set();
+    const pendingRelationsSet = new Set();
+
+    userRelationships.forEach((relationship) => {
+      if (relationship.type === RELATIONSHIP_TYPE.PENDING) {
+        pendingRelationsSet.add(relationship.relatedToUserId);
+        return;
+      }
+
+      excludedRelationsSet.add(relationship.relatedToUserId);
     });
 
-    res.status(200).send(users.map(({ id, name }) => ({
+    const filteredUsers = users.filter(({ id }) => !excludedRelationsSet.has(id));
+
+    res.status(200).send(filteredUsers.map(({ id, name }) => ({
       id,
       name,
-      isRequested: false,
+      isRequested: pendingRelationsSet.has(id),
     })));
   },
 );

@@ -5,7 +5,7 @@ import {
 import { TextInput, Button, Title } from 'react-native-paper';
 import { useSetRecoilState } from 'recoil';
 import { createUser } from '../apis/users';
-import { userAccessTokenState } from '../atoms/user';
+import { userAccessTokenSelector } from '../atoms/user';
 
 import PhoneInput from '../components/PhoneInput';
 import { showErrorToast } from '../components/Toast';
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 });
 
 export default function SignUpScreen({ navigation } : RootTabScreenProps<'SignUp'>) {
-  const setUserAccessToken = useSetRecoilState(userAccessTokenState);
+  const setUserAccessToken = useSetRecoilState(userAccessTokenSelector);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [name, onChangeName] = useState('');
   const [phoneNumber, onChangePhoneNumber] = useState('');
