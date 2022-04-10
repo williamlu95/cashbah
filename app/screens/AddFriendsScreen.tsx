@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import React, { useCallback, useState } from 'react';
 import {
-  Searchbar, List, Divider, Avatar,
+  Searchbar, List, Divider, Avatar, TouchableRipple,
 } from 'react-native-paper';
 import debounce from 'lodash.debounce';
 import { View } from '../components/Themed';
@@ -75,10 +75,14 @@ export default function AddFriendScreen() {
     }
   };
 
-  const renderRequestIcon = (isRequested: boolean, color: string) => (
+  const renderRequestIcon = (isRequested: boolean, color: string, id: string) => (
     isRequested
       ? <List.Icon color={color} icon="account-clock" />
-      : <List.Icon color={color} icon="account-plus" />
+      : (
+        <TouchableRipple onPress={handleFriendRequestPress(id)}>
+          <List.Icon color={color} icon="account-plus" />
+        </TouchableRipple>
+      )
   );
 
   const renderUserList = () => users.map(({ id, name, isRequested }) => (
@@ -92,9 +96,7 @@ export default function AddFriendScreen() {
             }}
             />
           )}
-          right={({ color }) => renderRequestIcon(isRequested, color)}
-          disabled={isRequested}
-          onPress={handleFriendRequestPress(id)}
+          right={({ color }) => renderRequestIcon(isRequested, color, id)}
         />
       </View>
       <Divider />

@@ -11,6 +11,8 @@
     "db:migrate:undo": "sequelize-cli db:migrate:undo",
     "db:drop": "node -r esm ./scripts/drop-db.js",
     "db:stop": "docker stop mysql5.7",
+    "db:up": "npm run db:start && sleep 10 && npm run db:create && npm run db:migrate",
+    "db:down": "npm run db:drop && npm run db:stop",
     "migrate:create": "sequelize-cli migration:generate --name",
     "watch": "nodemon -r esm index.js"
   },

@@ -14,8 +14,9 @@ router.get(
         relatedFromUserId: userId,
       },
       include: {
-        model: db.user,
+        model: db.User,
         as: 'relatedTo',
+        order: [['name']],
       },
     });
 
@@ -23,6 +24,30 @@ router.get(
       type,
       id: relatedTo.id,
       name: relatedTo.name,
+    })));
+  },
+);
+
+router.get(
+  '/pending-requests',
+  authRequired,
+  async ({ db, userId }, res) => {
+    const pendingRequests = await db.UserRelationship.findAll({
+      where: {
+        relatedToUserId: userId,
+        type: RELATIONSHIP_TYPE.PENDING,
+      },
+      include: {
+        model: db.User,
+        as: 'relatedFrom',
+        order: [['name']],
+      },
+    });
+
+    res.status(200).send(pendingRequests.map(({ id, type, relatedFrom }) => ({
+      id,
+      type,
+      name: relatedFrom.name,
     })));
   },
 );
@@ -79,13 +104,45 @@ router.put(
   },
 );
 
+router.post(
+  '/:userRelationshipId/accept-request',
+  authRequired,
+  async ({ db, params }, res) => {
+    const { userRelationshipId } = params;
+    const userRelationship = await db.UserRelationship.findOne(
+      { where: { id: userRelationshipId } },
+    );
+
+    await db.sequelize.transaction(async (transaction) => {
+      await db.UserRelationship.update(
+        { type: RELATIONSHIP_TYPE.ACTIVE },
+        { where: { id: userRelationshipId }, transaction },
+      );
+
+      await db.UserRelationship.bulkCreate(
+        [{
+          relatedFromUserId: userRelationship.relatedToUserId,
+          relatedToUserId: userRelationship.relatedFromUserId,
+          type: RELATIONSHIP_TYPE.ACTIVE,
+        }],
+        {
+          transaction,
+          updateOnDuplicate: ['type'],
+        },
+      );
+    });
+
+    res.status(200).send(userRelationship.id);
+  },
+);
+
 router.delete(
   '/:userRelationshipId',
   authRequired,
   async ({ db, params }, res) => {
     const { userRelationshipId } = params;
     await db.UserRelationship.destroy({ where: { id: userRelationshipId } });
-    res.status(200);
+    res.sendStatus(204);
   },
 );
 

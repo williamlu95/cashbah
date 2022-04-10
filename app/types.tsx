@@ -16,6 +16,7 @@ declare global {
 export type RootStackParamList = {
   Root: undefined;
   AddFriends: undefined;
+  PendingRequests: undefined;
   NotFound: undefined;
   Login: undefined;
   SignUp: undefined;

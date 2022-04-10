@@ -14,6 +14,7 @@ import LinkingConfiguration from './LinkingConfiguration';
 import { userAccessTokenState } from '../atoms/user';
 import HeaderBar from './HeaderBar';
 import BottomNavigator from './BottomNavigator';
+import PendingFriendsScreen from '../screens/PendingFriendsScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -30,6 +31,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="AddFriends" component={AddFriendsScreen} options={{ title: 'Add Friends' }} />
+        <Stack.Screen name="PendingRequests" component={PendingFriendsScreen} options={{ title: 'Pending Requests' }} />
       </Stack.Group>
     </Stack.Navigator>
   ) : (
