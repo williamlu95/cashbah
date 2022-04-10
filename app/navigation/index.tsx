@@ -15,6 +15,8 @@ import { userAccessTokenState } from '../atoms/user';
 import HeaderBar from './HeaderBar';
 import BottomNavigator from './BottomNavigator';
 import PendingFriendsScreen from '../screens/PendingFriendsScreen';
+import AddExpenseScreen from '../screens/AddExpenseScreen';
+import AddEventScreen from '../screens/AddEventScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -32,6 +34,9 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="AddFriends" component={AddFriendsScreen} options={{ title: 'Add Friends' }} />
         <Stack.Screen name="PendingRequests" component={PendingFriendsScreen} options={{ title: 'Pending Requests' }} />
+        <Stack.Screen name="AddExpense" component={AddExpenseScreen} options={{ title: 'Add Expense' }} />
+        <Stack.Screen name="AddEvent" component={AddEventScreen} options={{ title: 'Add Event' }} />
+
       </Stack.Group>
     </Stack.Navigator>
   ) : (

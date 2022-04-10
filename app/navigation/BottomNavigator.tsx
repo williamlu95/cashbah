@@ -1,13 +1,14 @@
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useState } from 'react';
-import { Text } from 'react-native';
 import { BottomNavigation } from 'react-native-paper';
+import ExpensesScreen from '../screens/ExpensesScreen';
 import FriendsScreen from '../screens/FriendsScreen';
+import EventsScreen from '../screens/EventsScreen';
 
 export default function BottomNavigator({ navigation }:
 { navigation: NativeStackNavigationProp<ParamListBase> }) {
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(1);
   const [routes] = useState([
     { key: 'friends', title: 'Friends', icon: 'account-group' },
     { key: 'expenses', title: 'Expenses', icon: 'receipt' },
@@ -15,8 +16,8 @@ export default function BottomNavigator({ navigation }:
 
   const renderScene = BottomNavigation.SceneMap({
     friends: () => <FriendsScreen navigation={navigation} />,
-    expenses: () => <Text>Expenses</Text>,
-    events: () => <Text>Events</Text>,
+    expenses: () => <ExpensesScreen navigation={navigation} />,
+    events: () => <EventsScreen navigation={navigation} />,
   });
 
   return (

@@ -17,6 +17,8 @@ export type RootStackParamList = {
   Root: undefined;
   AddFriends: undefined;
   PendingRequests: undefined;
+  AddExpense: undefined;
+  AddEvent: undefined;
   NotFound: undefined;
   Login: undefined;
   SignUp: undefined;
